@@ -16,6 +16,14 @@ public class MainForm {
 
     public MainForm(){
 
+        Welcome wel = new Welcome();
+        wel.pack();
+        wel.setVisible(true);
+        wel.setLocationRelativeTo(null);
+        wel.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+
+
+
         Action frame = new Action();
 
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
@@ -27,7 +35,7 @@ public class MainForm {
             frameSize.width = screenSize.width;
         }
         frame.setLocation((screenSize.width - frameSize.width) / 2,(screenSize.height - frameSize.height) / 2);
-        frame.setVisible(true);
+       // frame.setVisible(true);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 

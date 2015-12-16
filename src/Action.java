@@ -7,7 +7,7 @@ import java.awt.*;
 public class Action extends JFrame {
 
 
-    JPanel contentPanel = new JPanel();;
+    JPanel contentPanel = new JPanel();
     final JPanel gamePanel = new JPanel();
     final JButton[][] buttons = new JButton[4][4];   //массив кнопочек
     final int[][] matrix = new int[4][4];    //матрица для хранения чисел
@@ -31,6 +31,9 @@ public class Action extends JFrame {
 
 
     private void initializationFrame() throws Exception {
+
+
+
         contentPanel = (JPanel) this.getContentPane();
         contentPanel.setLayout(new BorderLayout());
         this.setSize(new Dimension(206, 275));
