@@ -7,25 +7,33 @@ import java.awt.*;
 public class MainForm {
 
     public static void main(String args[]){
-        SwingUtilities.invokeLater(new Runnable(){
-            public void run(){
-                new MainForm();
-            }
-        });
+
+        try {
+            // Set cross-platform Java L&F (also called "Metal")
+            UIManager.setLookAndFeel("javax.swing.plaf.nimbus.NimbusLookAndFeel");
+        }
+        catch (UnsupportedLookAndFeelException e) {
+            // handle exception
+        }
+        catch (ClassNotFoundException e) {
+            // handle exception
+        }
+        catch (InstantiationException e) {
+            // handle exception
+        }
+        catch (IllegalAccessException e) {
+            // handle exception
+        }
+
+        new MainForm(); //Create and show the GUI.
+
     }
 
     public MainForm(){
 
-        Welcome wel = new Welcome();
-        wel.pack();
-        wel.setVisible(true);
-        wel.setLocationRelativeTo(null);
-        wel.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-
-
-
         Action frame = new Action();
 
+        //по центру экрана
         Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
         Dimension frameSize = frame.getSize();
         if (frameSize.height > screenSize.height){
@@ -35,7 +43,7 @@ public class MainForm {
             frameSize.width = screenSize.width;
         }
         frame.setLocation((screenSize.width - frameSize.width) / 2,(screenSize.height - frameSize.height) / 2);
-       // frame.setVisible(true);
+        frame.setVisible(true);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
 
