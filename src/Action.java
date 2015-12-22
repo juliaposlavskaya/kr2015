@@ -1,20 +1,17 @@
 import javax.swing.*;
 import java.awt.*;
-import java.awt.event.ActionEvent;
 import java.awt.event.MouseEvent;
 
 /**
  * Created by Julia on 11.12.2015.
  */
-public class Action extends JFrame {
+public class Action extends JPanel {
 
     JPanel contentPanel = new JPanel();
     final JPanel gamePanel = new JPanel(); //панель с кнопочками
     final JButton[][] buttons = new JButton[4][4];   //массив кнопочек
     final int[][] matrix = new int[4][4];    //матрица для хранения чисел
     final JLabel status= new JLabel(); //линия статус бара
-    Toolkit kit;
-    Image img;
 
 
    //создаем рамку
@@ -34,19 +31,19 @@ public class Action extends JFrame {
 
     private void initializationFrame() throws Exception {
 
-        contentPanel = (JPanel) this.getContentPane();
+     //   contentPanel = (JPanel) this.getContentPane();
         contentPanel.setLayout(new BorderLayout());
-        this.setSize(new Dimension(206, 275));
-        this.setTitle("15");
+      //  this.setSize(new Dimension(206, 275));
+     //   this.setTitle("15");
 
         //иконка
-        kit = Toolkit.getDefaultToolkit();
+      /*  kit = Toolkit.getDefaultToolkit();
         img = kit.getImage("caticon.png");
         this.setIconImage(img);
 
         this.setResizable(false); //запрещаем изменение размера окна
-
-        JMenuBar menuBar = new JMenuBar(); //Создаем основное меню бар
+        */
+     /*   JMenuBar menuBar = new JMenuBar(); //Создаем основное меню бар
 
         //Создаем подменю
         JMenu menuGame = new JMenu("Игра");
@@ -100,10 +97,12 @@ public class Action extends JFrame {
         menuGame.add(record);
         menuGame.add(exit);
         menuHelp.add(specification);
+        */
 
         gamePanel.setLayout(null);
 
         // добавляем кнопочки
+        gamePanel.setLayout(new GridLayout(4, 4));
         int count = 0;
         for (int i = 0; i < 4; i++)
             for (int j = 0; j < 4; j++) {
@@ -128,6 +127,9 @@ public class Action extends JFrame {
 
         //новая игра
         newGame();
+
+
+        this.add(contentPanel);
     }
 
     //Случайным образом переставляем элементы матрицы
