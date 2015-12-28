@@ -5,25 +5,23 @@ import java.awt.event.MouseEvent;
 /**
  * Created by Julia on 11.12.2015.
  */
-public class Action extends JPanel {
+public class Game extends JPanel {
 
     JPanel contentPanel = new JPanel();
     final JPanel gamePanel = new JPanel(); //панель с кнопочками
     final JButton[][] buttons = new JButton[4][4];   //массив кнопочек
     final int[][] matrix = new int[4][4];    //матрица для хранения чисел
     final JLabel status= new JLabel(); //линия статус бара
+    String nickname;
+    int account;
 
-
-   //создаем рамку
-    public Action()
-    {
+    //создаем панель
+    public Game(){
         enableEvents(AWTEvent.WINDOW_EVENT_MASK);
-        try
-        {
+        try{
             initializationFrame();
         }
-        catch(Exception e)
-        {
+        catch(Exception e){
             e.printStackTrace();
         }
     }
@@ -31,90 +29,29 @@ public class Action extends JPanel {
 
     private void initializationFrame() throws Exception {
 
-     //   contentPanel = (JPanel) this.getContentPane();
         contentPanel.setLayout(new BorderLayout());
-      //  this.setSize(new Dimension(206, 275));
-     //   this.setTitle("15");
-
-        //иконка
-      /*  kit = Toolkit.getDefaultToolkit();
-        img = kit.getImage("caticon.png");
-        this.setIconImage(img);
-
-        this.setResizable(false); //запрещаем изменение размера окна
-        */
-     /*   JMenuBar menuBar = new JMenuBar(); //Создаем основное меню бар
-
-        //Создаем подменю
-        JMenu menuGame = new JMenu("Игра");
-        JMenu menuHelp = new JMenu("Помощь");
-
-        //Добавляем подменю в основное меню
-        menuBar.add(menuGame);
-        menuBar.add(menuHelp);
-
-        this.setJMenuBar(menuBar); //Устанавливаем полученное меню на окно
-
-        //Создаем элементы подменю Game с обработчиками событий
-        JMenuItem nGame = new JMenuItem("Новая игра");
-        JMenuItem record = new JMenuItem("Рекорды");
-        JMenuItem exit = new JMenuItem("Выход");
-
-        //Создаем элемент подменю Help с обработчиками событий
-        JMenuItem specification = new JMenuItem("Правила");
-
-
-        //Добавляем обработчики событий по нажатию
-        exit.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(ActionEvent e){
-                System.exit(0);//Выход из системы
-            }
-        });
-
-        specification.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(ActionEvent e){
-                JOptionPane.showMessageDialog(null,
-                        "Правила игры лалала","Правила",
-                        JOptionPane.QUESTION_MESSAGE);
-            }
-        });
-
-        nGame.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(ActionEvent e){
-                newGame();
-            }
-        });
-
-        record.addActionListener(new java.awt.event.ActionListener() {
-            public void actionPerformed(ActionEvent e){
-                //для рекордов
-            }
-        });
-
-
-        //Добавляем созданные элементы к подменю
-        menuGame.add(nGame);
-        menuGame.add(record);
-        menuGame.add(exit);
-        menuHelp.add(specification);
-        */
 
         gamePanel.setLayout(null);
 
         // добавляем кнопочки
         gamePanel.setLayout(new GridLayout(4, 4));
+
         int count = 0;
         for (int i = 0; i < 4; i++)
             for (int j = 0; j < 4; j++) {
                 buttons[i][j] = new JButton(""+count);
                 //устанавливаем обработчик событий
                 buttons[i][j].addMouseListener(new AdapterForButtons(i,j));
+
                 buttons[i][j].setSize(50,50);
                 buttons[i][j].setLocation(50*j,50*i);
                 buttons[i][j].setCursor(new Cursor(Cursor.HAND_CURSOR));
                 gamePanel.add(buttons[i][j]);
                 matrix[i][j]=count;//задаем матрицу
                 count++;
+
+                buttons[i][j].setBackground(Color.getHSBColor(150,256,170));
+                buttons[i][j].setForeground(Color.WHITE);
             }
         buttons[0][0].setText(" "); //будет несуществующей, чтобы двигать кнопочки
 
@@ -124,10 +61,6 @@ public class Action extends JPanel {
         //статус
         status.setBorder(BorderFactory.createEtchedBorder());
         contentPanel.add(status,BorderLayout.SOUTH);
-
-        //новая игра
-        newGame();
-
 
         this.add(contentPanel);
     }
@@ -150,24 +83,22 @@ public class Action extends JPanel {
     //новая игра
     public void newGame(){
 
+        account = 0;
+
         randomizeMatrix();
         for(int i = 0;i<4;i++)
-            for(int j = 0;j<4;j++)
-            {
+            for(int j = 0;j<4;j++){
                 //пишем на кнопочках числа из матрицы
                 if(matrix[i][j]!=0) {
                     buttons[i][j].setText("" + matrix[i][j]);
-                    buttons[i][j].setBackground(Color.getHSBColor(150,256,170));
-                    buttons[i][j].setForeground(Color.WHITE);
                 }
-                else {
+                else if(matrix[i][j]==0) {
                     buttons[i][j].setText("");
                     buttons[i][j].setEnabled(false);
-                    buttons[i][j].setBackground(Color.getHSBColor(150,256,160));
                 }
-
             }
-        status.setText("новая игра");
+
+        status.setText(nickname + ": новая игра");
         gamePanel.setVisible(true);
     }
 
@@ -189,6 +120,7 @@ public class Action extends JPanel {
 
             //меняем курсор
             buttons[posi][posj].setCursor(new Cursor(Cursor.MOVE_CURSOR));
+
             //запоминаем точку начала переноса кнопки
             startx = e.getX();
             starty = e.getY();
@@ -217,14 +149,20 @@ public class Action extends JPanel {
                         matrix[posi][posj+1] = matrix[posi][posj];
                         matrix[posi][posj]=0;
                         buttons[posi][posj].setText("");
+
                         buttons[posi][posj].setEnabled(false);
                         buttons[posi][posj].setBackground(Color.getHSBColor(150,256,160));
+
                         buttons[posi][posj+1].setText(""+matrix[posi][posj+1]);
+
                         buttons[posi][posj+1].setEnabled(true);
                         buttons[posi][posj+1].setBackground(Color.getHSBColor(150,256,170));
                         buttons[posi][posj+1].setForeground(Color.WHITE);
-                        status.setText("отличный ход");
-                    }else status.setText("это невозможно");
+
+                        account++;
+
+                        status.setText(nickname + ": отличный ход: " +account + " шагов");
+                    }else status.setText(nickname + ": это невозможно");
                 }
                 else{
 
@@ -233,14 +171,20 @@ public class Action extends JPanel {
                         matrix[posi][posj-1] = matrix[posi][posj];
                         matrix[posi][posj]=0;
                         buttons[posi][posj].setText("");
+
                         buttons[posi][posj].setEnabled(false);
                         buttons[posi][posj].setBackground(Color.getHSBColor(150,256,160));
+
                         buttons[posi][posj-1].setText(""+matrix[posi][posj-1]);
+
                         buttons[posi][posj-1].setEnabled(true);
                         buttons[posi][posj-1].setBackground(Color.getHSBColor(150,256,170));
                         buttons[posi][posj-1].setForeground(Color.WHITE);
-                        status.setText("отличный ход");
-                    }else status.setText("это невозможно");
+
+                        account++;
+
+                        status.setText(nickname + ": отличный ход: " +account + " шагов");
+                    }else status.setText(nickname + ": это невозможно");
                 }
             }
             else{
@@ -253,14 +197,19 @@ public class Action extends JPanel {
                         matrix[posi+1][posj] = matrix[posi][posj];
                         matrix[posi][posj]=0;
                         buttons[posi][posj].setText("");
+
                         buttons[posi][posj].setEnabled(false);
                         buttons[posi][posj].setBackground(Color.getHSBColor(150,256,160));
+
                         buttons[posi+1][posj].setText(""+matrix[posi+1][posj]);
+
                         buttons[posi+1][posj].setEnabled(true);
                         buttons[posi+1][posj].setBackground(Color.getHSBColor(150,256,170));
                         buttons[posi+1][posj].setForeground(Color.WHITE);
-                        status.setText("отличный ход");
-                    }else status.setText("это невозможно");
+
+                        account++;
+                        status.setText(nickname + ": отличный ход: " +account + " шагов");
+                    }else status.setText(nickname + ": это невозможно");
                 }
                 else{
 
@@ -269,15 +218,20 @@ public class Action extends JPanel {
                         matrix[posi-1][posj] = matrix[posi][posj];
                         matrix[posi][posj]=0;
                         buttons[posi][posj].setText("");
+
                         buttons[posi][posj].setEnabled(false);
                         buttons[posi][posj].setBackground(Color.getHSBColor(150,256,160));
+
                         buttons[posi-1][posj].setText(""+matrix[posi-1][posj]);
+
                         buttons[posi-1][posj].setEnabled(true);
                         buttons[posi-1][posj].setBackground(Color.getHSBColor(150,256,170));
                         buttons[posi-1][posj].setForeground(Color.WHITE);
-                        status.setText("отличный ход");
+
+                        account++;
+                        status.setText(nickname + ": отличный ход: " +account + " шагов");
                     }else
-                        status.setText("это невозможно");
+                        status.setText(nickname + ": это невозможно");
                 }
             }
             //проверяем все ли числа стоят на своих местах если да то победа
@@ -292,7 +246,8 @@ public class Action extends JPanel {
             if(error == 1) {
                 status.setText("Победа!!!");
                 int result = JOptionPane.showConfirmDialog(null,
-                        "Победа!!!","Победа!!! Желаете сыграть еще раз?",JOptionPane.YES_NO_OPTION);
+                        "Победа!!!","Победа!!! Поздравляем! Вы выиграли за " + account + " шагов!!" + "\n"  +
+                                "Желаете ли сыграть еще раз?",JOptionPane.YES_NO_OPTION);
                 if (result == JOptionPane.YES_OPTION)
                     newGame();
                 else

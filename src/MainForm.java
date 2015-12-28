@@ -7,8 +7,9 @@ import java.awt.event.ActionEvent;
  */
 public class MainForm {
 
-    final JFrame frame = new JFrame();
+    final JFrame frame = new JFrame(); //создаем рамку
     final JMenuBar menuBar = new JMenuBar(); //Создаем основное меню бар
+    final JPanel mPanel = new JPanel(); //основная панель
 
     public static void main(String args[]){
 
@@ -35,8 +36,9 @@ public class MainForm {
 
     public MainForm(){
 
-        Action gamePa = new Action();
-
+        Game gamePa = new Game();
+        Welcome welcomePanel = new Welcome();
+        RecordsGame recordsGame = new RecordsGame();
 
         //иконка
         Toolkit kit = Toolkit.getDefaultToolkit();
@@ -60,7 +62,7 @@ public class MainForm {
         JMenuItem specification = new JMenuItem("Правила");
 
 
-        //Добавляем обработчики событий по нажатию
+        //Добавляем обработчики событий по нажатию кнопок из менюбара
         exit.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(ActionEvent e){
                 System.exit(0);//Выход из системы
@@ -70,7 +72,12 @@ public class MainForm {
         specification.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(ActionEvent e){
                 JOptionPane.showMessageDialog(null,
-                        "Правила игры лалала","Правила",
+                        "Пятнашки - головоломка, представляющая собой 15 квадратных костяшек с нанесенными числами от 1 до 15. " + "\n" +
+                                "Все костяшки заключены в квадратную коробку размером 4x4. Таким образом при размещении костяшек" + "\n" +
+                                "в коробке остается одно пустое место размером с одну костяшку, которое можно использовать" + "\n" +
+                                "для перемещения костяшек внутри коробки. Цель игры - упорядочить размещение чисел в коробке," + "\n" +
+                                "разместив их по возрастанию слева направо и сверху вниз, начиная с костяшки с номером 1 в левом" + "\n" +
+                                "верхнем углу и заканчивая пустым местом в правом нижнем углу коробки. ","Правила",
                         JOptionPane.QUESTION_MESSAGE);
             }
         });
@@ -78,12 +85,53 @@ public class MainForm {
         nGame.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(ActionEvent e){
                 gamePa.newGame();
+
             }
         });
 
         record.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(ActionEvent e){
-                //для рекордов
+
+                recordsGame.setVisible(true);
+                gamePa.setVisible(false);
+                frame.setSize(new Dimension(206, 206));
+              //  frame.pack();
+
+            }
+        });
+
+        recordsGame.okayButton.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(ActionEvent e){
+
+                recordsGame.setVisible(false);
+                gamePa.setVisible(true);
+                frame.setSize(new Dimension(206, 206));
+            }
+        });
+
+        //для основной панельки
+        welcomePanel.play.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(ActionEvent e){
+
+                gamePa.nickname = welcomePanel.textField1.getText();
+                gamePa.setVisible(true);
+                welcomePanel.setVisible(false);
+                frame.setSize(new Dimension(206, 206));
+                gamePa.newGame();
+            }
+        });
+
+        welcomePanel.specificationWelcome.addActionListener(new java.awt.event.ActionListener() {
+            public void actionPerformed(ActionEvent e){
+
+                JOptionPane.showMessageDialog(null,
+                        "Пятнашки - головоломка, представляющая собой 15 квадратных костяшек с нанесенными числами от 1 до 15. " + "\n" +
+                                "Все костяшки заключены в квадратную коробку размером 4x4. Таким образом при размещении костяшек" + "\n" +
+                                "в коробке остается одно пустое место размером с одну костяшку, которое можно использовать" + "\n" +
+                                "для перемещения костяшек внутри коробки. Цель игры - упорядочить размещение чисел в коробке," + "\n" +
+                                "разместив их по возрастанию слева направо и сверху вниз, начиная с костяшки с номером 1 в левом" + "\n" +
+                                "верхнем углу и заканчивая пустым местом в правом нижнем углу коробки. ","Правила",
+                        JOptionPane.QUESTION_MESSAGE);
             }
         });
 
@@ -94,31 +142,24 @@ public class MainForm {
         menuGame.add(exit);
         menuHelp.add(specification);
 
+        frame.setLocationRelativeTo(null);//по центру экрана
 
-        //по центру экрана
-        Dimension screenSize = Toolkit.getDefaultToolkit().getScreenSize();
-        Dimension frameSize = frame.getSize();
-        if (frameSize.height > screenSize.height){
-            frameSize.height = screenSize.height;
-        }
-        if (frameSize.width > screenSize.width){
-            frameSize.width = screenSize.width;
-        }
-        frame.setLocation((screenSize.width - frameSize.width) / 2,(screenSize.height - frameSize.height) / 2);
-
-        frame.setSize(new Dimension(206, 206));
+        frame.setSize(new Dimension(240, 150));
         frame.setTitle("15");
-        frame.getContentPane();
+        frame.setResizable(false);
+       // frame.getContentPane();
 
+        mPanel.add(welcomePanel);
+        mPanel.add(gamePa);
+        mPanel.add(recordsGame);
+        recordsGame.setVisible(false);
+        gamePa.setVisible(false);
+        welcomePanel.setVisible(true);
 
+        frame.add(mPanel);
 
-        frame.add(gamePa);
-        gamePa.setVisible(true);
-
-     //   frame.pack();
         frame.setJMenuBar(menuBar); //Устанавливаем полученное меню на окно
         frame.setVisible(true);
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
     }
-
 }
