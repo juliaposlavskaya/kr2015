@@ -1,6 +1,7 @@
 import javax.swing.*;
 import java.awt.*;
 import java.awt.event.MouseEvent;
+import java.io.IOException;
 
 /**
  * Created by Julia on 11.12.2015.
@@ -244,10 +245,16 @@ public class Game extends JPanel {
                     count++;
                 }
             if(error == 1) {
-                status.setText("Победа!!!");
+                status.setText("1!!!");
                 int result = JOptionPane.showConfirmDialog(null,
                         "Победа!!!","Победа!!! Поздравляем! Вы выиграли за " + account + " шагов!!" + "\n"  +
                                 "Желаете ли сыграть еще раз?",JOptionPane.YES_NO_OPTION);
+                RecordsGame.resultsTable.add(new ResultsTable(nickname, account));
+                try {
+                    RecordsGame.recordsToString();
+                } catch (IOException e1) {
+                    e1.printStackTrace();
+                }
                 if (result == JOptionPane.YES_OPTION)
                     newGame();
                 else

@@ -40,6 +40,7 @@ public class MainForm {
         Welcome welcomePanel = new Welcome();
         RecordsGame recordsGame = new RecordsGame();
 
+
         //иконка
         Toolkit kit = Toolkit.getDefaultToolkit();
         Image img = kit.getImage("caticon.png");

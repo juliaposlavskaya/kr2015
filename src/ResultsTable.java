@@ -27,11 +27,21 @@ public class ResultsTable {
         this.nickname = nickname;
     }
 
-  /*  public ResultsTable(String str){
+    public ResultsTable(){
+
+    }
+
+    //разбивает одну заметку которую считали из файла
+    public void createRec(String str){
         String sss = str;
         String resultsT[] = sss.split("%");
-        this.numbers = Integer.parseInt(resultsT[0]);
-        this.nickname = resultsT[1];
-        this.account = Integer.parseInt(resultsT[2]);
-    }*/
+        this.nickname = resultsT[0];
+        this.account = Integer.parseInt(resultsT[1]);
+    }
+
+    //преобразвание одного рещультата в стринг
+    public String toString(){
+        String str = this.nickname + "%" + this.account;
+        return str;
+    }
 }
